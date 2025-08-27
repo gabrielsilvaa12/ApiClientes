@@ -1,106 +1,85 @@
-# 📌 API de Gerenciamento de Clientes
+# API de Gerenciamento de Clientes
 
-Uma **API RESTful** robusta e completa desenvolvida em **ASP.NET Core 8** para o gerenciamento de clientes.  
-Este projeto demonstra as melhores práticas de desenvolvimento back-end, incluindo arquitetura de serviços, persistência de dados com Entity Framework Core, validação de dados e integração com serviços externos.
+Uma API RESTful robusta e completa desenvolvida em **ASP.NET Core 8** para o gerenciamento de clientes. Este projeto demonstra as melhores práticas de desenvolvimento back-end, incluindo arquitetura de serviços, persistência de dados com Entity Framework Core, validação de dados e integração com serviços externos.
+
+![Demonstração da API](https://i.imgur.com/i8dSmJ9.gif)
 
 ---
 
 ## ✨ Funcionalidades Principais
 
-- **CRUD Completo para Clientes**: Criar, Ler, Atualizar e Deletar (exclusão lógica) clientes.
-- **Validação de CPF em Tempo Real**: Integração com a API do Ministério da Saúde (`scpa-backend.saude.gov.br`) para garantir autenticidade no cadastro.
-- **Segurança e Boas Práticas**:
-  - Exclusão Lógica (**Soft Delete**): clientes inativos, preservando histórico.
-  - **Projeção de Dados**: listagem retorna apenas dados não-sensíveis.
-  - **Código Organizado**: separação em **Models**, **Data**, **Services** e **Controllers**.
-- **Documentação Interativa com Swagger**: interface **OpenAPI** para explorar e testar endpoints.
+* **CRUD Completo para Clientes**: Operações para Criar, Ler, Atualizar e Deletar (com exclusão lógica) clientes.
+* **Validação de CPF em Tempo Real**: Integração com a API do Ministério da Saúde (`scpa-backend.saude.gov.br`) para validar a autenticidade de cada CPF no momento do cadastro, garantindo a integridade dos dados.
+* **Segurança e Boas Práticas**:
+    * **Exclusão Lógica (Soft Delete)**: Clientes não são removidos fisicamente do banco, apenas marcados como inativos, preservando o histórico de dados.
+    * **Projeção de Dados**: O endpoint de listagem geral retorna apenas dados não-sensíveis do cliente, protegendo informações privadas.
+* **Código Organizado**: A solução segue princípios de organização, separando responsabilidades em `Models`, `Data`, `Services` e `Controllers`.
+* **Documentação Interativa com Swagger**: A API é 100% documentada e testável através de uma interface Swagger (OpenAPI) gerada automaticamente.
 
 ---
 
 ## 🚀 Tecnologias Utilizadas
 
-| Tecnologia               | Descrição                                                                 |
-|---------------------------|---------------------------------------------------------------------------|
-| **.NET 8**               | Versão mais recente da plataforma da Microsoft.                           |
-| **ASP.NET Core**         | Framework para construção de APIs de alta performance.                   |
-| **Entity Framework Core**| ORM para comunicação com o banco de dados.                                |
-| **SQL Server**           | Sistema de gerenciamento de banco de dados relacional.                   |
-| **Swagger (Swashbuckle)**| Geração automática de documentação da API.                                |
-| **Injeção de Dependência** | Gerenciamento de `DbContext` e serviços.                                |
+| Tecnologia              | Descrição                                                                        |
+| :---------------------- | :------------------------------------------------------------------------------- |
+| **.NET 8** | A mais recente versão da plataforma de desenvolvimento da Microsoft.               |
+| **ASP.NET Core** | Framework para a construção de APIs de alta performance.                           |
+| **Entity Framework Core** | ORM para a comunicação e mapeamento objeto-relacional com o banco de dados.      |
+| **SQL Server** | Sistema de gerenciamento de banco de dados relacional da Microsoft.                |
+| **Swagger (Swashbuckle)** | Ferramenta para geração automática de documentação da API.                       |
+| **Injeção de Dependência** | Padrão nativo do ASP.NET Core para gerenciar `DbContext` e serviços.             |
 
 ---
 
 ## ⚙️ Como Executar o Projeto Localmente
 
-### 🔹 Pré-requisitos
-- [.NET 8 SDK](https://dotnet.microsoft.com/pt-br/download/dotnet/8.0)
-- [Visual Studio 2022](https://visualstudio.microsoft.com/pt-br/)
-- [SQL Server Management Studio (SSMS)](https://aka.ms/ssmsfullsetup)
+Siga os passos abaixo para rodar a aplicação em seu ambiente de desenvolvimento.
 
----
+### Pré-requisitos
 
-### 🔹 Passo 1 – Clone o Repositório
+* [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+* [Visual Studio 2022](https://visualstudio.microsoft.com/pt-br/)
+* [SQL Server Management Studio (SSMS)](https://learn.microsoft.com/pt-br/sql/ssms/download-sql-server-management-studio-ssms)
+
+### 1. Clone o Repositório
+
 ```bash
 git clone <URL_DO_SEU_REPOSITORIO_AQUI>
 cd ApiClientes
-🔹 Passo 2 – Configure a Conexão com o Banco de Dados
+2. Configure a Conexão com o Banco de Dados
 O projeto está configurado para usar o SQL Server LocalDB, que já vem com o Visual Studio.
 
-Abra o arquivo appsettings.json e confira a string de conexão:
+Abra o arquivo appsettings.json.
 
-json
-Copiar código
+Confira se a string de conexão DefaultConnection está correta para sua máquina. O padrão é:
+
+JSON
+
 "ConnectionStrings": {
   "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=DbClientes;Trusted_Connection=True;MultipleActiveResultSets=true"
 }
-🔹 Passo 3 – Aplique as Migrations
-Esse comando cria o banco de dados DbClientes e a tabela Clientes automaticamente.
+3. Aplique as Migrations
+Este comando irá criar o banco de dados DbClientes e a tabela Clientes automaticamente.
 
-No Console do Gerenciador de Pacotes (Ferramentas > NuGet > Console do Gerenciador de Pacotes), rode:
+Abra o Console do Gerenciador de Pacotes no Visual Studio (Ferramentas > Gerenciador de Pacotes do NuGet > Console do Gerenciador de Pacotes).
 
-powershell
-Copiar código
+Execute o comando:
+
+PowerShell
+
 Update-Database
-🔹 Passo 4 – Execute a Aplicação
-Pressione F5 ou clique no botão ▶️ no Visual Studio.
+4. Execute a Aplicação
+Pressione F5 ou clique no botão de "play" no Visual Studio para iniciar a API.
 
-O navegador abrirá automaticamente a documentação do Swagger.
+O navegador será aberto automaticamente na página do Swagger.
 
-📡 Endpoints da API
-Base URL: http://localhost:<porta>/api/Clientes
+Endpoints da API
+Acesse http://localhost:<porta>/swagger para testar todos os endpoints.
 
+/api/Clientes
 Verbo	Rota	Descrição
-POST	/	Cria um novo cliente (valida CPF em tempo real).
-GET	/	Lista clientes ativos (somente 5 campos não-sensíveis).
-GET	/{id}	Busca cliente específico pelo ID, retornando todos os dados.
+POST	/	Cria um novo cliente. O CPF é validado em tempo real antes da criação.
+GET	/	Retorna uma lista de clientes ativos. Apenas 5 campos não-sensíveis são exibidos.
+GET	/{id}	Busca um cliente específico pelo ID. Retorna todos os dados do cliente.
 PUT	/{id}	Atualiza os dados de um cliente existente.
-DELETE	/{id}	Inativa o cliente (Soft Delete).
-
-📖 Documentação
-Acesse:
-👉 http://localhost:<porta>/swagger
-
-📂 Estrutura do Projeto
-pgsql
-Copiar código
-ApiClientes/
- ├── Controllers/
- ├── Data/
- ├── Models/
- ├── Services/
- ├── appsettings.json
- └── Program.cs
-📦 Exemplo de Payload (POST Cliente)
-json
-Copiar código
-{
-  "nome": "João Silva",
-  "cpf": "12345678901",
-  "email": "joao.silva@email.com",
-  "telefone": "(11) 99999-9999",
-  "endereco": "Rua Exemplo, 123, São Paulo - SP"
-}
-📌 Autor
-Projeto desenvolvido para estudo e aplicação de boas práticas em ASP.NET Core 8.
-
-Copiar código
+DELETE	/{id}	Inativa um cliente (exclusão lógica).
