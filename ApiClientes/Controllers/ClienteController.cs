@@ -1,8 +1,8 @@
 ﻿using ApiClientes.Data;
 using ApiClientes.Models;
+using ApiClientes.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace ApiClientes.Controllers
 {
@@ -11,10 +11,12 @@ namespace ApiClientes.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ValidationService _validationService;
 
-        public ClientesController(AppDbContext context)
+        public ClientesController(AppDbContext context, ValidationService validationService)
         {
             _context = context;
+            _validationService = validationService;
         }
 
         [HttpGet]
@@ -50,8 +52,15 @@ namespace ApiClientes.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> CreateCliente(Cliente cliente)
         {
+            var isCpfValido = await _validationService.IsCpfValido(cliente.Cpf);
+            if (!isCpfValido)
+            {
+                return BadRequest(new { message = "O CPF informado é inválido ou não foi encontrado na base de dados do governo." });
+            }
+
             _context.Clientes.Add(cliente);
             await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetClienteById), new { id = cliente.Id }, cliente);
         }
 
