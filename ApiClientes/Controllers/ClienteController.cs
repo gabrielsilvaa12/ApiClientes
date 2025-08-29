@@ -39,7 +39,9 @@ namespace ApiClientes.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetClienteById(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
+            var cliente = await _context.Clientes
+                .Where(c => c.Ativo && c.Id == id)
+                .FirstOrDefaultAsync();
 
             if (cliente == null)
             {
@@ -48,6 +50,7 @@ namespace ApiClientes.Controllers
 
             return cliente;
         }
+
 
         [HttpPost]
         public async Task<ActionResult<Cliente>> CreateCliente(Cliente cliente)
